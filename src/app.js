@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
+const MongoStore = require("connect-mongo");
 require("dotenv").config({ path: "./.env" });
 
 const errorController = require("./controllers/errorController");
@@ -18,28 +19,39 @@ app.use(helmet());
 
 //use morgan to log request
 app.use(morgan("dev"));
-//format value from request must be json
-app.use(express.json());
 
-//cors
+app.enable("trust proxy");
+
+// cors
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.CLIENT_URL,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
 );
 
+//format value from request must be json
+app.use(express.json());
+
 app.use(
   session({
-    secret: process.env.COOKIE_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
+    cookie: {
+      secure: false,
+      httpOnly: false,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: false,
+      // path: "/",
+    },
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(passport.authenticate("session"));
 
 //Define route here
 app.use("/", route);

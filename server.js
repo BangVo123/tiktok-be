@@ -6,9 +6,9 @@ require("dotenv").config({ path: "./.env" });
 const server = http.createServer(app);
 
 mongoose
-  .connect("mongodb://localhost:27017/Tiktok")
+  .connect(process.env.MONGODB_URL)
   .then(console.log("Connect to db success"));
 
-server.listen(process.env.PORT, "127.0.0.1", () =>
+server.listen(process.env.PORT, () =>
   console.log(`Server listening request on port ${process.env.PORT}`)
 );

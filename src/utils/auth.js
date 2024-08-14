@@ -1,41 +1,56 @@
 const passport = require("passport");
-const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 require("dotenv").config();
+const AuthService = require("../services/auth");
 const User = require("../models/User");
-const AppError = require("./error");
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  // console.log("serialize user id", user._id);
+  done(null, user.account_id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  const user = await User.findById(id);
-  done(null, user);
+  try {
+    const user = await User.findOne({ account_id: id });
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
 });
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: process.env.CLIENT_CALLBACK_URL,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
-    async (accessToken, refreshToken, profile, cb) => {
+    async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log(profile);
-        let user = await User.findOne({ google_id: profile.id });
-        if (!user) {
-          user = await User.create({
-            full_name: profile.displayName,
-            email: profile.emails[0].value,
-            google_id: profile.id,
-            avatar: profile.photos[0].value,
-          });
-        }
-        console.log(user);
-        cb(null, user);
+        const user = await AuthService.findOrCreate(profile);
+        done(null, user);
       } catch (err) {
-        cb(err, null);
+        done(err);
+      }
+    }
+  )
+);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      console.log(profile);
+      try {
+        const user = await AuthService.findOrCreate(profile);
+        done(null, user);
+      } catch (err) {
+        done(err);
       }
     }
   )

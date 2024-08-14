@@ -1,13 +1,23 @@
-const authService = require("../services/authService");
+const asyncHandler = require("../helper/asyncHandler");
 
-class authController {
-  //   static signUpGoogle = async (req, res, next) => {
-  //     //should be custom function to send responsive
-  //     const user = await authService.signUpGoogle(req, client);
-  //     console.log(user);
-  //     //send responsive
-  //     res.status(200).json(user);
-  //   };
+class AuthController {
+  static handleGoogleCB = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      return res
+        .status(401)
+        .json({ status: "Fail", message: "User not authenticate" });
+    }
+  };
+
+  static getUser = asyncHandler(async (req, res, next) => {
+    const user = req.user;
+    console.log("user: ", req.user);
+
+    res.status(200).json({
+      status: "Success",
+      data: user,
+    });
+  });
 }
 
-module.exports = authController;
+module.exports = AuthController;
