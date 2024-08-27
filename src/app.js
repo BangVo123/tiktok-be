@@ -20,7 +20,7 @@ app.use(helmet());
 //use morgan to log request
 app.use(morgan("dev"));
 
-app.enable("trust proxy");
+app.enable("trust proxy", 1);
 
 // cors
 app.use(

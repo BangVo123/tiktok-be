@@ -1,7 +1,8 @@
 const passport = require("passport");
 
 const authMiddleware = (provider) => {
-  return passport.authenticate(provider, { scope: ["email", "profile"] });
+  const profile = provider === "facebook" ? "public_profile" : "profile";
+  return passport.authenticate(provider, { scope: ["email", profile] });
 };
 
 const authCallbackMiddleware = (provider) => {
