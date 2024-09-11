@@ -12,6 +12,10 @@ class VideoService {
 
     return video;
   };
+
+  static getVideos = async() => {
+    
+  }
 }
 
 module.exports = VideoService;

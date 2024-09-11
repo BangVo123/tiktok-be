@@ -1,14 +1,8 @@
 const asyncHandler = require("../helper/asyncHandler");
+const AuthService = require("../services/auth");
+const { createLocalUser } = require("../services/auth");
 
 class AuthController {
-  static handleGoogleCB = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-      return res
-        .status(401)
-        .json({ status: "Fail", message: "User not authenticate" });
-    }
-  };
-
   static getUser = asyncHandler(async (req, res, next) => {
     const user = req.user;
     console.log("user: ", req.user);
@@ -35,6 +29,12 @@ class AuthController {
       });
     });
   };
+  static sendCode = asyncHandler(async (req, res, next) => {
+    await AuthService.sendCode({ email: req.body.email, type: req.body.type });
+    res.status(200).json({
+      message: "Success",
+    });
+  });
 }
 
 module.exports = AuthController;
