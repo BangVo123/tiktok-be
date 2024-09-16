@@ -13,6 +13,7 @@ const videoSchema = new mongoose.Schema({
   },
   belong_to: {
     type: mongoose.Types.ObjectId,
+    ref: "User",
     required: [true, "Video must belong to one user"],
   },
   like: {
@@ -30,6 +31,10 @@ const videoSchema = new mongoose.Schema({
   content: {
     type: String,
     required: [true, "Video must have content"],
+  },
+  share: {
+    type: Number,
+    default: 0,
   },
 });
 

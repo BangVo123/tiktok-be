@@ -16,6 +16,18 @@ class VideoController {
       data: video,
     });
   });
+
+  static getVideos = asyncHandler(async (req, res, next) => {
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 5;
+
+    const videos = await VideoService.getVideos({ page, limit });
+
+    res.status(200).json({
+      message: "Get videos success",
+      data: videos,
+    });
+  });
 }
 
 module.exports = VideoController;

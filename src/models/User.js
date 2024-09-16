@@ -7,16 +7,22 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter your name"],
     },
-    nickname: {
+    nick_name: {
       type: String,
       require: [true, "Please enter your nickname"],
       trim: true,
     },
     email: String,
     phone_nums: String,
-    password: String,
+    password: {
+      type: String,
+      select: false,
+    },
     avatar: String,
-    bio: String,
+    bio: {
+      type: String,
+      default: "No bio yet",
+    },
     account_id: String,
     provider: String,
     tick: {

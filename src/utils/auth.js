@@ -46,45 +46,6 @@ passport.use(
   )
 );
 
-// passport.use(
-//   "local",
-//   new LocalStrategy(
-//     {
-//       usernameField: "username",
-//       passwordField: "password",
-//       passReqToCallback: true,
-//     },
-//     async (req, username, password, done) => {
-//       const { action } = req.body;
-//       try {
-//         const foundUser = await User.findOne({
-//           $or: [{ email: username }, { phone_nums: username }],
-//         });
-
-//         if (action === "login") {
-//           if (!foundUser) return done(new AppError("User not found", 404));
-//           const comparePass = await bcrypt.compare(
-//             password,
-//             foundUser.password
-//           );
-//           if (!comparePass)
-//             return done(new AppError("Email or password not correct", 404));
-//           return done(null, foundUser);
-//         } else if (action === "signup") {
-//           if (foundUser) return done(new AppError("User already exists"));
-//           const newUser = await AuthService.createLocalUser({
-//             username,
-//             password,
-//           });
-//           return done(null, newUser);
-//         }
-//       } catch (err) {
-//         done(err);
-//       }
-//     }
-//   )
-// );
-
 passport.use(
   "login",
   new LocalStrategy(
@@ -97,7 +58,7 @@ passport.use(
         const foundUser = await User.findOne({
           $or: [{ email: username }, { phone_nums: username }],
           provider: null,
-        });
+        }).select("+password");
 
         if (!foundUser) return done(new AppError("User not found", 404));
         const comparePass = await bcrypt.compare(password, foundUser.password);
@@ -135,7 +96,7 @@ passport.use(
         const foundUser = await User.findOne({
           $or: [{ email: username }, { phone_nums: username }],
           provider: null,
-        });
+        }).select("+password");
 
         if (foundUser) return done(new AppError("User already exists"));
         const newUser = await AuthService.createLocalUser({
@@ -165,7 +126,7 @@ passport.use(
         const foundUser = await User.findOne({
           $or: [{ email: username }, { phone_nums: username }],
           provider: null,
-        });
+        }).select("+password");
 
         if (!foundUser) return done(new AppError("User not found", 404));
 
