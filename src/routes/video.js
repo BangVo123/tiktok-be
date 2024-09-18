@@ -4,8 +4,8 @@ const VideoController = require("../controllers/videoController");
 
 const router = express.Router();
 
-router.use("/", protect);
 router.get("/", VideoController.getVideos);
+router.use("/", protect);
 router.post("/", VideoController.addVideo);
 
 module.exports = router;

@@ -23,13 +23,6 @@ class VideoService {
       )
       .skip(skip)
       .limit(limit);
-
-    console.log({
-      videos,
-      page,
-      limit,
-      skip,
-    });
     return videos;
   };
 }
