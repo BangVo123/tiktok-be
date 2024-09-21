@@ -3,6 +3,8 @@ const { isEmail, isPhoneNumber } = require("../helper/authValidate");
 const DigitCode = require("../models/DigitCode");
 const sendMail = require("./mail");
 const AppError = require("../utils/error");
+const Like = require("../models/Like");
+const Love = require("../models/Love");
 
 class AuthService {
   static findOrCreate = async (profile, provider) => {
@@ -56,7 +58,7 @@ class AuthService {
     });
 
     //delete all code of this email
-    await DigitCode.deleteMany({ email: email   });
+    await DigitCode.deleteMany({ email: email });
 
     const auth = {
       user: process.env.EMAIL,

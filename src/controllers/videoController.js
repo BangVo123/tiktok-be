@@ -28,6 +28,24 @@ class VideoController {
       data: videos,
     });
   });
+
+  static likeVideo = asyncHandler(async (req, res, next) => {
+    await VideoService.likeVideo({
+      videoId: req.params.videoId,
+      userId: req.user.id,
+    });
+
+    res.sendStatus(200);
+  });
+
+  static loveVideo = asyncHandler(async (req, res, next) => {
+    await VideoService.loveVideo({
+      videoId: req.params.videoId,
+      userId: req.user.id,
+    });
+
+    res.sendStatus(200);
+  });
 }
 
 module.exports = VideoController;
