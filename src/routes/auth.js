@@ -60,6 +60,4 @@ router.use(protect);
 
 router.get("/logout", AuthController.logout);
 
-router.get("/", AuthController.getUser);
-
 module.exports = router;
