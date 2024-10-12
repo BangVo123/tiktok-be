@@ -20,6 +20,6 @@ const commentSchema = new mongoose.Schema({
   parent: mongoose.Types.ObjectId,
 });
 
-const Comment = mongoose.model(("Comment", commentSchema));
+const Comment = mongoose.model("Comment", commentSchema);
 
 module.exports = Comment;
