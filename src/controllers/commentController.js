@@ -3,7 +3,7 @@ const CommentService = require("../services/comment");
 
 class CommentController {
   static createComment = asyncHandler(async (req, res, next) => {
-    const comment = await CommentService.createComment(req?.body);
+    await CommentService.createComment(req?.body);
 
     res.status(201).json({
       message: "Success",

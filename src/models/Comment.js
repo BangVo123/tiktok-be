@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Video = require("./Video");
+const AppError = require("../utils/error");
 
 const commentSchema = new mongoose.Schema({
   content: {
@@ -18,6 +20,17 @@ const commentSchema = new mongoose.Schema({
     required: [true, "Comment must belong to one user"],
   },
   parent: mongoose.Types.ObjectId,
+});
+
+commentSchema.pre("save", async function (next) {
+  const foundVideo = await Video.findById(this.belong_to);
+
+  if (!foundVideo) throw new AppError("Something went wrong", 400);
+
+  foundVideo.comment = foundVideo.comment + 1;
+  await foundVideo.save();
+
+  next();
 });
 
 const Comment = mongoose.model("Comment", commentSchema);

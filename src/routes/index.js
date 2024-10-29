@@ -6,6 +6,6 @@ router.use("/api/v1/upload", require("./upload"));
 router.use("/api/v1/video", require("./video"));
 router.use("/api/v1/follow", require("./follow"));
 router.use("/api/v1/users", require("./user"));
-router.use("/api/v1.comment", require("./comment"));
+router.use("/api/v1/comments", require("./comment"));
 
 module.exports = router;

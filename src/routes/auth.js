@@ -4,7 +4,6 @@ const protect = require("../middlewares/protect");
 const {
   authCallbackMiddleware,
   authMiddleware,
-  localAuth,
 } = require("../middlewares/auth");
 const redirect = require("../middlewares/redirect");
 const passport = require("passport");
