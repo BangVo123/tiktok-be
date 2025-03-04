@@ -6,5 +6,6 @@ const router = express.Router();
 router.use(protect);
 router.get("/:userId", UserController.getUserInfo);
 router.get("/", UserController.getCurUserInfo);
+router.patch("/", UserController.updateCurrentUser);
 
 module.exports = router;

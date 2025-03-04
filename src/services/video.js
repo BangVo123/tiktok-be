@@ -31,6 +31,18 @@ class VideoService {
     return videos;
   };
 
+  static getVideosOfMe = async (userId) => {
+    const videos = await Video.find({ belong_to: userId });
+    const likes = await Like.find({ user_id: userId }).populate("video_id");
+    const loves = await Love.find({ user_id: userId }).populate("video_id");
+
+    return {
+      videos,
+      likes,
+      favorites: loves,
+    };
+  };
+
   static likeVideo = async ({ videoId, userId }) => {
     const video = await Video.findById(videoId);
     if (!video) throw new AppError("Infomation of video not valid");

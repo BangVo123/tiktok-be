@@ -29,6 +29,29 @@ class UserController {
       },
     });
   });
+
+  static updateCurrentUser = asyncHandler(async (req, res, next) => {
+    const result = await UserService.updateCurrentUser({
+      userId: req.user.id,
+      payload: req.body,
+    });
+
+    res.status(200).json({
+      status: "Success",
+      data: result,
+    });
+  });
+
+  static getAccountRelations = asyncHandler(async (req, res, next) => {
+    const resData = await UserService.getAccountRelation({
+      userId: req.user.id,
+    });
+
+    res.status(200).json({
+      status: "Success",
+      data: resData,
+    });
+  });
 }
 
 module.exports = UserController;

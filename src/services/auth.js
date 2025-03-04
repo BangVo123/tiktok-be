@@ -8,7 +8,6 @@ const Love = require("../models/Love");
 
 class AuthService {
   static findOrCreate = async (profile, provider) => {
-    // console.log("profile", profile);
     let user = await User.findOne({ account_id: profile.id });
     const name =
       provider === "facebook"

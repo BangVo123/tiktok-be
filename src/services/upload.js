@@ -23,4 +23,21 @@ const uploadVideo = ({ fileBuffer, userId }) => {
   });
 };
 
-module.exports = { uploadVideo };
+const uploadAvatar = async ({ avatar, userId }) => {
+    return new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream(
+        {
+          folder: `image/${userId}`,
+          resource_type: "image",
+        },
+        (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        }
+      )
+      .end(avatar);
+  });
+};
+
+module.exports = { uploadVideo, uploadAvatar };

@@ -5,13 +5,19 @@ const UploadController = require("../controllers/uploadController");
 
 const router = express.Router();
 
-// router.use("/upload", protect);
+router.use(protect);
 
 router.post(
   "/",
   protect,
   uploadMemory.single("file"),
   UploadController.uploadVideo
+);
+
+router.post(
+  "/avatar",
+  uploadMemory.single("avatar"),
+  UploadController.uploadAvatar
 );
 
 module.exports = router;

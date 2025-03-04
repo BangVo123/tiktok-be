@@ -29,6 +29,15 @@ class VideoController {
     });
   });
 
+  static getVideosOfMe = asyncHandler(async (req, res, next) => {
+    const response = await VideoService.getVideosOfMe(req.user.id);
+
+    res.status(200).json({
+      message: "Get videos of me success",
+      data: response,
+    });
+  });
+
   static likeVideo = asyncHandler(async (req, res, next) => {
     await VideoService.likeVideo({
       videoId: req.params.videoId,

@@ -12,29 +12,32 @@ class FollowService {
   static follow = async ({ userId, followingId }) => {
     const follower = await User.findById(userId);
     const following = await User.findById(followingId);
-    console.log(`er ${follower} ing ${following}`);
     const foundFollow = await Follower.findOne({
       user_id: userId,
       following_id: followingId,
     });
+
     if (foundFollow) {
       await foundFollow.deleteOne();
       follower.followings_count = follower.followings_count - 1;
       following.followers_count = following.followers_count - 1;
-      console.log(follower, following);
+
       await follower.save();
       await following.save();
+
       return {};
     } else {
       const newFollow = await Follower.create({
         user_id: userId,
         following_id: followingId,
       });
+
       follower.followings_count = follower.followings_count + 1;
       following.followers_count = following.followers_count + 1;
-      console.log(follower, following);
+
       await follower.save();
       await following.save();
+
       return newFollow;
     }
   };
