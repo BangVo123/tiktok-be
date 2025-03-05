@@ -19,6 +19,9 @@ class UserController {
     const curUser = req.user;
     const favorite = await VideoService.getFavorite({ userId: curUser.id });
     const follow = await FollowService.getAllFollow({ userId: curUser.id });
+    const accRelations = await UserService.getAccountRelation({
+      userId: curUser.id,
+    });
 
     res.status(200).json({
       status: "Success",
@@ -26,6 +29,7 @@ class UserController {
         user: curUser,
         favorite,
         follow,
+        accRelations,
       },
     });
   });

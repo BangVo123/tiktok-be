@@ -18,7 +18,7 @@ const socketHandler = (io) => {
       let newComment;
       try {
         newComment = await CommentService.createComment({
-          content: comment,
+          content: comment.content,
           belong_to: room,
           sender: sender,
           parent: null,
