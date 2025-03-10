@@ -6,7 +6,7 @@ const digitCodeSchema = new mongoose.Schema({
     required: [true, "Email must be required"],
   },
   code: {
-    type: String,
+    type: Number,
     required: [true, "Code must be required"],
   },
   type: {
@@ -15,7 +15,7 @@ const digitCodeSchema = new mongoose.Schema({
   },
   expired_at: {
     type: Date,
-    default: () => new Date(Date.now() + 60 * 1000),
+    default: () => new Date(Date.now() + 60 * 5 * 1000),
   },
 });
 

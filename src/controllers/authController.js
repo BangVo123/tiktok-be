@@ -1,7 +1,47 @@
+const passport = require("passport");
 const asyncHandler = require("../helper/asyncHandler");
 const AuthService = require("../services/auth");
+const { signAToken, signFToken } = require("../utils/jwt");
+const SuccessResponse = require("../helper/successResponse");
 
 class AuthController {
+  static login = (req, res, next) => {
+    passport.authenticate("local", (err, user) => {
+      if (err) next(err);
+
+      console.log("user", user);
+      const accessToken = signAToken({ id: user.id, email: user.email });
+      console.log(accessToken);
+
+      res.cookie("jwt", accessToken, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      return new SuccessResponse({
+        message: "Login success",
+        metadata: accessToken,
+      }).send(res);
+    })(req, res, next);
+  };
+
+  static signup = (req, res, next) => {
+    passport.authenticate("local", {}, (err, user, info) => {
+      if (err) next(err);
+
+      const accessToken = signAToken({ id: user.id, email: user.email });
+
+      res.cookie("jwt", accessToken, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      return new SuccessResponse({
+        message: "Login success",
+      }).send(res);
+    })(req, res, next);
+  };
+
   static logout = (req, res, next) => {
     req.logout((err) => {
       if (err) next(err);
@@ -15,6 +55,7 @@ class AuthController {
     res.clearCookie("connext.sid", { path: "/", domain: "localhost" }); //Delete cookie in client browser
     // res.redirect(process.env.CLIENT_URL);
   };
+
   static sendCode = asyncHandler(async (req, res, next) => {
     await AuthService.sendCode({ email: req.body.email, type: req.body.type });
     res.status(200).json({

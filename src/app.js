@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const session = require("express-session");
+const cookieParse = require("cookie-parser");
 const passport = require("passport");
 const MongoStore = require("connect-mongo");
 require("dotenv").config({ path: "./.env" });
@@ -35,6 +36,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(cookieParse());
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -46,10 +49,10 @@ app.use(
     }),
     cookie: {
       secure: false,
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      sameSite: false,
-      // path: "/",
+      // sameSite: false,
+      path: "/",
     },
   })
 );
