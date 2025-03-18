@@ -3,7 +3,7 @@ const UserService = require("../services/user");
 
 const socketHandler = (io) => {
   io.on("connection", (socket) => {
-    console.log("Client connect successful: ", socket.id);
+    // console.log("Client connect successful: ", socket.id);
 
     socket.on("join", (room) => {
       socket.join(room);

@@ -9,9 +9,7 @@ class AuthController {
     passport.authenticate("local", (err, user) => {
       if (err) next(err);
 
-      console.log("user", user);
       const accessToken = signAToken({ id: user.id, email: user.email });
-      console.log(accessToken);
 
       res.cookie("jwt", accessToken, {
         httpOnly: true,
@@ -45,15 +43,16 @@ class AuthController {
   static logout = (req, res, next) => {
     req.logout((err) => {
       if (err) next(err);
-      req.session.destroy((err) => {
-        if (err) return next(err);
+
+      req.session.destroy(() => {
+        res.clearCookie("connect.sid");
+        res.clearCookie("jwt");
+
         res.status(200).json({
           message: "Logout success",
         });
       });
     });
-    res.clearCookie("connext.sid", { path: "/", domain: "localhost" }); //Delete cookie in client browser
-    // res.redirect(process.env.CLIENT_URL);
   };
 
   static sendCode = asyncHandler(async (req, res, next) => {
